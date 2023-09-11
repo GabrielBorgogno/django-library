@@ -1,0 +1,196 @@
+<!-- book_list.html -->
+
+{% extends 'library/base.html' %}
+
+{% block content %}
+<style>
+    /* CSS styles */
+
+    .book-item {
+        display: flex;
+        align-items: center;
+        font-size: larger;
+        margin-bottom: 20px;
+    }
+
+    .book-info {
+        flex: 1;
+        margin-left: 20px;
+    }
+
+    .book-image {
+        width: 150px;
+        height: 200px;
+        object-fit: cover;
+        margin-right: 20px;
+    }
+
+    .book-title {
+        font-size: 24px;
+        margin-bottom: 5px;
+    }
+
+    .book-author {
+        font-size: 16px;
+        margin-bottom: 10px;
+        color: #777;
+    }
+
+    .book-description {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+
+    .book-launch-year {
+        font-size: 14px;
+        margin-bottom: 10px;
+        color: #777;
+    }
+
+    .rent-button {
+        background-color: crimson;
+        color: #fff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .rent-form-container {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        height: 400px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        z-index: 9999;
+        padding: 20px;
+    }
+
+    .rent-form-container iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+    .rent-form-container.active {
+        display: block;
+    }
+
+    .rental-list-container {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #ccc;
+    }
+
+    .rental-list-title {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .rental-item {
+        margin-bottom: 10px;
+    }
+
+    .rental-item .rental-info {
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .rental-item .rental-info strong {
+        font-weight: bold;
+    }
+</style>
+
+<div class="container">
+    <h1 class="mt-5">Biblioteca</h1>
+    <div class="row">
+        {% for book in books %}
+            <div class="col-md-6">
+                <div class="book-item">
+                    <img class="book-image" src="{{ book.book_image.url }}" alt="{{ book.title }}">
+                    <div class="book-info">
+                        <h2 class="book-title">{{ book.title }}</h2>
+                        <p class="book-author">Escrito por {{ book.author_name }}</p>
+                        <p class="book-launch-year">Lançamento: {{ book.launch_year }}</p>
+                        <p class="book-description">{{ book.description }}</p>
+                        <button class="rent-button" onclick="openRentForm({{ book.id }})">Alugar</button>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col">
+                <p>No books available.</p>
+            </div>
+        {% endfor %}
+
+       
+</div>
+
+<div class="rent-form-container" id="rentFormContainer">
+    <iframe id="rentFormIframe" src="" frameborder="0"></iframe>
+    <input type="hidden" id="bookIdInput">
+    <button id="quitButton" onclick="quitRentForm()" class="btn-close position-fixed top-0 end-0" ></button>
+
+</div>
+
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Acesso Restrito</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Você precisa estar logado para acessar esta página.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fechar</button>
+                <a class="btn btn-secondary" href="{% url 'login' %}">Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block javascript %}
+<script>
+    function openRentForm(bookId) {
+        {% if not user.is_authenticated %}
+            // Check if the user is not authenticated and show the login modal
+            $('#loginModal').modal('show');
+        {% else %}
+            const rentFormContainer = document.getElementById('rentFormContainer');
+            const bookIdInput = document.getElementById('bookIdInput');
+    
+            // Check if the rentFormContainer and bookIdInput elements exist
+            if (rentFormContainer && bookIdInput) {
+                // Set the book code value
+                bookIdInput.value = bookId;
+                rentFormContainer.classList.add('active');
+    
+                // Set the src attribute of the iframe
+                const rentFormIframe = document.getElementById('rentFormIframe');
+                rentFormIframe.src = `/books/rental_form/${bookId}/`;
+            }
+        {% endif %}
+    }
+
+    function quitRentForm() {
+        const rentFormContainer = document.getElementById('rentFormContainer');
+        const rentFormIframe = document.getElementById('rentFormIframe');
+    
+        // Reset the src attribute of the iframe to an empty string
+        rentFormIframe.src = '';
+    
+        // Hide the rentFormContainer
+        rentFormContainer.classList.remove('active');
+    }
+</script>
+{% endblock %}
+
+{% endblock %}

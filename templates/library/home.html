@@ -1,0 +1,55 @@
+{% extends 'library/base.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="jumbotron mt-5">
+    <h1 class="display-4">Bem-vindo ao Portfólio da nossa Biblioteca!</h1>
+    <p class="lead"><strong>A aplicação tem como objetivo proporcionar o aluguel virtual de livros, permitindo que os usuários desfrutem da leitura sem desvalorizar a importância de um livro físico. O intuito é oferecer uma alternativa conveniente e acessível para que as pessoas tenham acesso a uma ampla variedade de livros, mesmo que não estejam disponíveis fisicamente. Através da aplicação, os usuários podem navegar por uma coleção de livros, ler suas descrições, visualizar capas e alugar os títulos desejados. O aluguel virtual permite que os usuários desfrutem da experiência de leitura em formato digital, enquanto ainda reconhecem o valor e a importância dos livros físicos. A aplicação busca combinar a comodidade e a praticidade da leitura digital com a apreciação pela literatura e o incentivo à leitura como um todo.</strong></p>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <p>
+
+
+      </p>
+      <h2>Ponto de Coleta para Livros</h2>
+      <p>
+        Nosso ponto de coleta para livros está localizado em Manhattan. É um local onde os usuários podem devolver os livros alugados e contribuir para o compartilhamento da literatura. Venha nos visitar!
+      </p>
+      <p>
+        Endereço:
+        123 Main Street,
+        Manhattan,
+        New York,
+        EUA
+      </p>
+    </div>
+    <div class="col-md-6 mb-4">
+      <h2>Localização</h2>
+      <div id="map"></div>
+    </div>
+  </div>
+</div>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<style>
+  #map {
+    height: 300px;
+  }
+</style>
+<script>
+  var map = L.map('map').setView([40.7831, -73.9712], 13);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+  L.marker([40.7831, -73.9712]).addTo(map)
+    .bindPopup('Localização em Manhattan')
+    .openPopup();
+</script>
+{% endblock %}

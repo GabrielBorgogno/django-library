@@ -1,0 +1,25 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+<style>
+  .btn-primary{
+    background-color: crimson;
+  }
+</style>
+{% block content %}
+<div class="container">
+  <h1 class="mt-5">Formulário de Aluguel</h1>
+  {% if book %}
+  <h2>Livro: {{ book.title }}</h2>
+  <form method="POST" action="{% url 'process_rental' %}">
+    {% csrf_token %}
+    <input type="hidden" name="book_id" value="{{ book.id }}">
+    <div class="mb-3">
+      <label for="rental_days" class="form-label">Duração do Aluguel (em dias)</label>
+      <input type="number" class="form-control" id="rental_days" name="rental_days" min="1" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Enviar</button>
+  </form>
+  {% else %}
+  <p>Livro não encontrado.</p>
+  {% endif %}
+</div>
+{% endblock %}

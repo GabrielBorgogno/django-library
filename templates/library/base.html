@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  {% load static %}
+
+  <style>
+    /* Existing CSS styles */
+
+    #video-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      object-fit: cover;
+    }
+
+    .navbar {
+      background-color: blue; /* Blue color for the navbar */
+      box-shadow: 0px 4px 8px crimson; /* Purple shadow effect */
+    }
+
+    .navbar .nav-link.active {
+      background-color: crimson; /* Light blue color for active menu item */
+      box-shadow: 0 2px 4px rgba(0, 123, 255, 0.25); /* Light shadow effect */
+    }
+
+    .logo-img {
+      width: 20%; /* Largura da imagem em porcentagem */
+      height: auto; /* Altura automática proporcional */
+    }
+  </style>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Biblioteca</title>
+  <!-- Incluir Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+  <!-- Video Background -->
+  <video id="video-background" autoplay muted loop>
+    <source src="{% static 'videos/background.mp4' %}" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <!-- Barra de Navegação -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <div class="navbar-brand">
+        <strong>E-Library</strong>
+        <img src="{% static 'images/icon.png' %}" alt="Logo" class="logo-img">
+      </div>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/">Início</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == '/books/' %}active{% endif %}" href="books">Livros</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == '/authors/' %}active{% endif %}" href="authors">Autores</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ms-auto">
+          {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'logout' %}">Sair</a>
+            </li>
+            {% if request.path == '/books/' %}
+              <li class="nav-item">
+                <a class="nav-link" href="rental_list">Lista de Aluguéis</a>
+              </li>
+            {% endif %}
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'login' %}">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'register' %}">Registrar</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Conteúdo da Página -->
+  <div class="container">
+    {% block content %}
+    {% endblock %}
+  </div>
+
+  <!-- Incluir Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

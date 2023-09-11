@@ -1,0 +1,31 @@
+{% extends 'library/base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="mt-5">Lista de Aluguéis</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID do Aluguel</th>
+                    <th>Código do Livro</th>
+                    <th>Descrição do Livro</th>
+                    <th>Estudante</th>
+                    <th>Data do Aluguel</th>
+                    <th>Devolvido</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rental in rentals %}
+                <tr>
+                    <td>{{ rental.rental_id }}</td>
+                    <td>{{ rental.book_code }}</td>
+                    <td>{{ rental.book_description }}</td>
+                    <td>{{ rental.student.username }}</td>
+                    <td>{{ rental.rental_date }}</td>
+                    <td>{{ rental.returned }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

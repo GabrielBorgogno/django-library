@@ -1,0 +1,23 @@
+<!-- authors.html -->
+{% extends 'library/base.html' %}
+
+{% block content %}
+<div class="container">
+<h1 class="mt-5">Autores</h1>
+<ul class="list-group mt-4">
+{% for author in authors %}
+<li class="list-group-item">
+<strong>Nome:</strong> {{ author.name }}<br>
+<strong>Vendas Estimadas Mínimas:</strong> {{ author.min_estimated_sales }}<br>
+<strong>Vendas Estimadas Máximas:</strong> {{ author.max_estimated_sales }}<br>
+<strong>Língua Original:</strong> {{ author.original_language }}<br>
+<strong>Gênero ou Principais Obras:</strong> {{ author.genre_or_major_works }}<br>
+<strong>Número de Livros:</strong> {{ author.number_of_books }}<br>
+<strong>Nacionalidade:</strong> {{ author.nationality }}
+</li>
+{% empty %}
+<li class="list-group-item">Nenhum autor disponível.</li>
+{% endfor %}
+</ul>
+</div>
+{% endblock %}
